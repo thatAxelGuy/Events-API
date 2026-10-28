@@ -5,7 +5,7 @@ import requests
 def test_health_returns_healthy(base_url):
     response = requests.get(f"{base_url}/api/health")
 
-    assert response.status_code == 999
+    assert response.status_code == 200
     assert response.json() == {"status": "healthy"}
 
 
