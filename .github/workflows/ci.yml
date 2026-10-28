@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v7
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v4
-      - name: Create docker image
+      - name: Build Docker Image
         run: docker build -t events-api:latest .
       - name: Start Container
         run: docker run -d -p 5000:5000 --name events-api-container events-api:latest
