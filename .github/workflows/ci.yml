@@ -69,3 +69,12 @@ jobs:
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: curl --fail --silent --show-error "$RENDER_DEPLOY_HOOK"
+
+      - name: Smoke Test Render Deployment
+        env:
+          RENDER_BASE_URL: ${{ secrets.RENDER_BASE_URL }}
+        run: |
+          sleep 60
+          curl --fail --silent --show-error \
+            --retry 10 --retry-delay 15 --retry-all-errors \
+            "$RENDER_BASE_URL/api/health"
