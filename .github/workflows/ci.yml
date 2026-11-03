@@ -42,6 +42,7 @@ jobs:
   deploy:
     needs: test
     # Deploy only on pushes to main, never on pull requests
+    environment: production
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
