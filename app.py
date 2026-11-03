@@ -13,16 +13,16 @@ import os
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+
     # Initialize extensions
     db.init_app(app)
     CORS(app)
     jwt = JWTManager(app)
-    
+
     # Swagger UI configuration
     SWAGGER_URL = '/apidocs'
     API_URL = '/api/openapi.yaml'
-    
+
     swaggerui_blueprint = get_swaggerui_blueprint(
         SWAGGER_URL,
         API_URL,
@@ -31,21 +31,21 @@ def create_app():
         }
     )
     app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-    
+
     # Serve OpenAPI spec file
     @app.route('/api/openapi.yaml')
     def serve_openapi():
         return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'openapi.yaml')
-    
+
     # Register blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(events_bp)
     app.register_blueprint(rsvps_bp)
-    
+
     # Create tables
     with app.app_context():
         db.create_all()
-    
+
     # Root endpoint
     @app.route('/', methods=['GET'])
     def root():
@@ -74,15 +74,14 @@ def create_app():
                 }
             }
         }), 200
-    
+
     # Health check endpoint
     @app.route('/api/health', methods=['GET'])
     def health():
         return jsonify({'status': 'healthy'}), 200
-    
+
     return app
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, host='0.0.0.0', port=5000)
-
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
